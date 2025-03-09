@@ -253,20 +253,20 @@ struct PinballGame
 	/*0x372*/ u8 filler372[0x11];
 	/*0x383*/ s8 unk383;
 	/*0x384*/ u8 unk384;
-	/*0x385*/ u8 unk385;
+	/*0x385*/ s8 unk385;
 	/*0x386*/ s8 unk386;
 	/*0x387*/ u8 unk387;
 	/*0x388*/ u8 unk388;
 	/*0x389*/ u8 filler389[0x9];
 	/*0x392*/ u16 unk392;
 	/*0x394*/ u16 unk394;
-	/*0x396*/ u8 unk396;
+	/*0x396*/ s8 unk396;
 	/*0x397*/ u8 unk397[3];
 	/*0x39A*/ u8 unk39A[3];
 	/*0x39D*/ u8 unk39D[3];
-	/*0x3A0*/ u8 unk3A0[3];
-	/*0x3A3*/ u8 unk3A3[3];
-	/*0x3A6*/ u8 unk3A6[3];
+	/*0x3A0*/ s8 unk3A0[3];
+	/*0x3A3*/ s8 unk3A3[3];
+	/*0x3A6*/ s8 unk3A6[3];
 	/*0x3A9*/ u8 unk3A9[3];
 	/*0x3AC*/ u8 unk3AC[3];
 	/*0x3B0*/ u16 unk3B0[3];
@@ -423,5 +423,7 @@ extern struct Unk02031520 gUnknown_02031520;
 extern s32 gUnknown_081B36A4[64];
 extern s32 gUnknown_082EE0E0[];
 extern const u8 gUnknown_08138834[0x2000];
+extern struct SongHeader *gUnknown_086A1588;
+extern s16 gUnknown_086AE5EC[][3];
 
 #endif // GUARD_GLOBAL_H
