@@ -21,8 +21,8 @@ extern u8 gUnknown_020030A0[][0x400];
 
 extern const struct Unk20028D8 gUnknown_086B077C[];
 extern const VoidFunc gUnknown_086B085C[];
-extern const struct MainUnk44 gUnknown_086B02CC[];
-extern const struct MainUnk44 gUnknown_086B03BC[];
+extern struct MainUnk44 *gUnknown_086B02CC[][60];
+extern struct MainUnk44 *gUnknown_086B04AC[][30];
 
 extern const u8 gUnknown_08158284[];
 extern const u8 gUnknown_08395A4C[];
@@ -137,7 +137,7 @@ void sub_49ED4(void)
         var0 = 0;
     else if (gMain.unk5 == gMain.selectedField)
         var0 = 1;
-    else if (gMain.selectedField <= FIELD_SAPPHIRE)
+    else if (gMain.selectedField < MAIN_FIELD_COUNT)
         var0 = 2;
     else
         var0 = 3;
@@ -232,7 +232,7 @@ void sub_49ED4(void)
     case 0:
         if (gMain.mainState != STATE_GAME_IDLE && gCurrentPinballGame->unkF4C && gMPlayInfo_BGM.status < 0)
             MPlayStart(&gMPlayInfo_BGM, gCurrentPinballGame->unkF4C);
-        if (gMain.selectedField <= FIELD_SAPPHIRE)
+        if (gMain.selectedField < MAIN_FIELD_COUNT)
             sub_31BE8(gCurrentPinballGame->unk6F);
         break;
     case 1:
@@ -364,7 +364,7 @@ void sub_4A518(void)
             gCurrentPinballGame->unk1DC = 60;
             DmaCopy16(3, gUnknown_084C0C6C, (void *)OBJ_VRAM0 + 0x600, 0x180);
             gCurrentPinballGame->unk1E2 = 2;
-            *gMain.unk44[1].unk2C = 0;
+            gMain.unk44[41]->a.unk0 = 0;
             gCurrentPinballGame->unk1C0 = 1;
             gCurrentPinballGame->unk5F6 = 3;
             gCurrentPinballGame->unk5F8 = 60 * 60;
@@ -484,7 +484,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[11];
         gUnknown_020028D8[2] = gUnknown_086B077C[1];
         gUnknown_020028D8[5] = gUnknown_086B077C[13];
-        gMain.unk44 = &gUnknown_086B02CC[gMain.selectedField * 2];
+        gMain.unk44 = gUnknown_086B02CC[gMain.selectedField];
         break;
     case FIELD_SAPPHIRE:
         gUnknown_020028D8[3] = gUnknown_086B077C[4];
@@ -493,7 +493,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[11];
         gUnknown_020028D8[2] = gUnknown_086B077C[1];
         gUnknown_020028D8[5] = gUnknown_086B077C[13];
-        gMain.unk44 = &gUnknown_086B02CC[gMain.selectedField * 2];
+        gMain.unk44 = gUnknown_086B02CC[gMain.selectedField];
         break;
     case FIELD_DUSCLOPS:
         gUnknown_020028D8[3] = gUnknown_086B077C[5];
@@ -502,7 +502,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[12];
         gUnknown_020028D8[2] = gUnknown_086B077C[2];
         gUnknown_020028D8[5] = gUnknown_086B077C[14];
-        gMain.unk44 = &gUnknown_086B03BC[gMain.selectedField];
+        gMain.unk44 = gUnknown_086B04AC[gMain.selectedField - FIELD_DUSCLOPS];
         break;
     case FIELD_KECLEON:
         gUnknown_020028D8[3] = gUnknown_086B077C[6];
@@ -511,7 +511,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[12];
         gUnknown_020028D8[2] = gUnknown_086B077C[2];
         gUnknown_020028D8[5] = gUnknown_086B077C[14];
-        gMain.unk44 = &gUnknown_086B03BC[gMain.selectedField];
+        gMain.unk44 = gUnknown_086B04AC[gMain.selectedField - FIELD_DUSCLOPS];
         break;
     case FIELD_KYOGRE:
         gUnknown_020028D8[3] = gUnknown_086B077C[7];
@@ -520,7 +520,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[12];
         gUnknown_020028D8[2] = gUnknown_086B077C[2];
         gUnknown_020028D8[5] = gUnknown_086B077C[14];
-        gMain.unk44 = &gUnknown_086B03BC[gMain.selectedField];
+        gMain.unk44 = gUnknown_086B04AC[gMain.selectedField - FIELD_DUSCLOPS];
         break;
     case FIELD_GROUDON:
         gUnknown_020028D8[3] = gUnknown_086B077C[8];
@@ -529,7 +529,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[12];
         gUnknown_020028D8[2] = gUnknown_086B077C[2];
         gUnknown_020028D8[5] = gUnknown_086B077C[14];
-        gMain.unk44 = &gUnknown_086B03BC[gMain.selectedField];
+        gMain.unk44 = gUnknown_086B04AC[gMain.selectedField - FIELD_DUSCLOPS];
         break;
     case FIELD_RAYQUAZA:
         gUnknown_020028D8[3] = gUnknown_086B077C[9];
@@ -538,7 +538,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[12];
         gUnknown_020028D8[2] = gUnknown_086B077C[2];
         gUnknown_020028D8[5] = gUnknown_086B077C[14];
-        gMain.unk44 = &gUnknown_086B03BC[gMain.selectedField];
+        gMain.unk44 = gUnknown_086B04AC[gMain.selectedField - FIELD_DUSCLOPS];
         break;
     case FIELD_SPHEAL:
         gUnknown_020028D8[3] = gUnknown_086B077C[10];
@@ -547,7 +547,7 @@ void sub_4A90C(void)
         gUnknown_020028D8[4] = gUnknown_086B077C[12];
         gUnknown_020028D8[2] = gUnknown_086B077C[2];
         gUnknown_020028D8[5] = gUnknown_086B077C[14];
-        gMain.unk44 = &gUnknown_086B03BC[gMain.selectedField];
+        gMain.unk44 = gUnknown_086B04AC[gMain.selectedField - FIELD_DUSCLOPS];
         break;
     }
 }
@@ -567,7 +567,7 @@ void sub_4AAD8(void)
 
         if (gMain.unkE)
         {
-            if (gMain.selectedField <= FIELD_SAPPHIRE)
+            if (gMain.selectedField < MAIN_FIELD_COUNT)
             {
                 sub_1D4D0();
                 sub_31BE8(0);
@@ -892,7 +892,7 @@ void sub_4B20C(void)
 
     if (gMain.unkE == 0)
     {
-        if (gMain.selectedField > FIELD_SAPPHIRE)
+        if (gMain.selectedField >= MAIN_FIELD_COUNT)
         {
             SetMainGameState(STATE_BONUS_FIELD_SELECT);
             return;
@@ -1091,7 +1091,7 @@ void sub_4B678(u16 arg0)
             gMain.eReaderBonuses[i] = gCurrentPinballGame->eReaderBonuses[i];
 
         gCurrentPinballGame->unk1100 = 1;
-        if (arg0 == 1 && gMain.selectedField <= FIELD_SAPPHIRE)
+        if (arg0 == 1 && gMain.selectedField < MAIN_FIELD_COUNT)
         {
             gCurrentPinballGame->unk68 = gCurrentPinballGame->unk4E +
                                          gCurrentPinballGame->unk121 +
@@ -1110,7 +1110,7 @@ void sub_4B678(u16 arg0)
     if (gMain.selectedField == FIELD_RUBY && gCurrentPinballGame->unk29E)
         sub_46FD4(1);
 
-    if (gMain.selectedField <= FIELD_SAPPHIRE)
+    if (gMain.selectedField < MAIN_FIELD_COUNT)
     {
         for (i = 0; i < 22; i++)
         {
