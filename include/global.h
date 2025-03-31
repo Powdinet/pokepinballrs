@@ -439,7 +439,7 @@ extern struct Unk02031520 gUnknown_02031520;
 extern s32 gUnknown_081B36A4[64];
 extern s32 gUnknown_082EE0E0[];
 extern const u8 gUnknown_08138834[0x2000];
-extern struct SongHeader *gUnknown_086A1588;
+extern struct SongHeader gUnknown_086A1588;
 extern s16 gUnknown_086AE5EC[][3];
 
 #endif // GUARD_GLOBAL_H

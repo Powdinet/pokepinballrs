@@ -945,9 +945,11 @@ void sub_3342C(s16 index1, s16 index2)
     gCurrentPinballGame->unk3D0[index2].unk2 = temp3D0.unk2;
 }
 
+#ifdef NONMATCHING
 void sub_336E0(void)
 {
-    s16 i, j;
+    s16 i;
+    s16 j;
     u8 bSpriteGroupsStillInUse = TRUE;
     s16 temp39D = 0;
     s16 temp39A = 0;
@@ -988,7 +990,7 @@ void sub_336E0(void)
                     temp39D = 4;
                     temp39A = 4;
                     gCurrentPinballGame->unk3B6[i] = 0;
-                    MPlayStart(&gMPlayInfo_SE1, gUnknown_086A1588);
+                    MPlayStart(&gMPlayInfo_SE1, &gUnknown_086A1588);
 
                     for (j = 2; j > 0; j--)
                     {
@@ -1095,23 +1097,21 @@ void sub_336E0(void)
                         gCurrentPinballGame->unk3B0[i]++;
                     }
                 }
+                else if (gUnknown_086AE5EC[gCurrentPinballGame->unk3A3[i]][1] > gCurrentPinballGame->unk3B0[i])
+                {
+                    gCurrentPinballGame->unk3B0[i]++;
+                }
                 else
                 {
-                    if (gUnknown_086AE5EC[gCurrentPinballGame->unk3A3[i]][1] > gCurrentPinballGame->unk3B0[i])
+                    gCurrentPinballGame->unk3B0[i] = 0;
+                    gCurrentPinballGame->unk3A3[i]++;
+                    if (gCurrentPinballGame->unk3A3[i] > 13)
                     {
-                        gCurrentPinballGame->unk3B0[i]++;
-                    }
-                    else
-                    {
-                        gCurrentPinballGame->unk3B0[i] = 0;
-                        gCurrentPinballGame->unk3A3[i]++;
-                        if (gCurrentPinballGame->unk3A3[i] > 13)
-                        {
-                            gCurrentPinballGame->unk3A3[i] = 0;
-                            gCurrentPinballGame->unk3A0[i] = 2;
-                        }
+                        gCurrentPinballGame->unk3A3[i] = 0;
+                        gCurrentPinballGame->unk3A0[i] = 2;
                     }
                 }
+                
                 temp39D = gUnknown_086AE5EC[gCurrentPinballGame->unk3A3[i]][0];
                 temp39A = gUnknown_086AE5EC[gCurrentPinballGame->unk3A3[i]][2];
                 break;
@@ -1250,3 +1250,1253 @@ void sub_336E0(void)
         gCurrentPinballGame->unk3D0[i].unk2 = gCurrentPinballGame->unk3C4[i].unk2 / 10 * 2 + 66;
     }
 }
+#else
+NAKED
+void sub_336E0(void)
+{
+    asm_unified("\n\
+	push {r4, r5, r6, r7, lr}\n\
+	mov r7, sl\n\
+	mov r6, sb\n\
+	mov r5, r8\n\
+	push {r5, r6, r7}\n\
+	sub sp, #8\n\
+	movs r4, #1\n\
+	movs r0, #0\n\
+	str r0, [sp]\n\
+	movs r7, #0\n\
+	ldr r0, _0803377C @ =gCurrentPinballGame\n\
+	ldr r3, [r0]\n\
+	ldr r2, _08033780 @ =0x00000385\n\
+	adds r1, r3, r2\n\
+	ldrb r1, [r1]\n\
+	lsls r1, r1, #0x18\n\
+	asrs r1, r1, #0x18\n\
+	cmp r1, #0x12\n\
+	ble _08033750\n\
+	movs r2, #0\n\
+	ldr r5, _08033784 @ =0x000003A6\n\
+	adds r1, r3, r5\n\
+_0803370C:\n\
+	lsls r0, r2, #0x10\n\
+	asrs r2, r0, #0x10\n\
+	adds r0, r1, r2\n\
+	ldrb r0, [r0]\n\
+	lsls r0, r0, #0x18\n\
+	asrs r0, r0, #0x18\n\
+	cmp r0, #0\n\
+	beq _0803371E\n\
+	movs r4, #0\n\
+_0803371E:\n\
+	adds r0, r2, #1\n\
+	lsls r0, r0, #0x10\n\
+	lsrs r2, r0, #0x10\n\
+	asrs r0, r0, #0x10\n\
+	cmp r0, #2\n\
+	ble _0803370C\n\
+	cmp r4, #0\n\
+	beq _08033750\n\
+	ldr r6, _0803377C @ =gCurrentPinballGame\n\
+	ldr r1, [r6]\n\
+	movs r2, #0\n\
+	movs r0, #2\n\
+	strb r0, [r1, #0x13]\n\
+	ldr r0, _08033788 @ =gMain\n\
+	movs r3, #0x80\n\
+	lsls r3, r3, #4\n\
+	adds r1, r0, r3\n\
+	strh r2, [r1]\n\
+	ldr r4, _0803378C @ =0x000008B8\n\
+	adds r1, r0, r4\n\
+	strh r2, [r1]\n\
+	movs r5, #0x97\n\
+	lsls r5, r5, #4\n\
+	adds r0, r0, r5\n\
+	strh r2, [r0]\n\
+_08033750:\n\
+	movs r2, #0\n\
+_08033752:\n\
+	ldr r6, _0803377C @ =gCurrentPinballGame\n\
+	ldr r0, [r6]\n\
+	lsls r2, r2, #0x10\n\
+	asrs r1, r2, #0x10\n\
+	movs r3, #0xe8\n\
+	lsls r3, r3, #2\n\
+	adds r0, r0, r3\n\
+	adds r0, r0, r1\n\
+	ldrb r0, [r0]\n\
+	lsls r0, r0, #0x18\n\
+	asrs r0, r0, #0x18\n\
+	str r2, [sp, #4]\n\
+	cmp r0, #9\n\
+	bls _08033772\n\
+	bl _08033FD8\n\
+_08033772:\n\
+	lsls r0, r0, #2\n\
+	ldr r1, _08033790 @ =_08033794\n\
+	adds r0, r0, r1\n\
+	ldr r0, [r0]\n\
+	mov pc, r0\n\
+	.align 2, 0\n\
+_0803377C: .4byte gCurrentPinballGame\n\
+_08033780: .4byte 0x00000385\n\
+_08033784: .4byte 0x000003A6\n\
+_08033788: .4byte gMain\n\
+_0803378C: .4byte 0x000008B8\n\
+_08033790: .4byte _08033794\n\
+_08033794: @ jump table\n\
+	.4byte _080337BC @ case 0\n\
+	.4byte _0803394C @ case 1\n\
+	.4byte _08033A20 @ case 2\n\
+	.4byte _08033B4C @ case 3\n\
+	.4byte _08033C7C @ case 4\n\
+	.4byte _08033D28 @ case 5\n\
+	.4byte _08033DF4 @ case 6\n\
+	.4byte _08033E70 @ case 7\n\
+	.4byte _08033EF0 @ case 8\n\
+	.4byte _08033F90 @ case 9\n\
+_080337BC:\n\
+	ldr r4, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r1, [r4]\n\
+	ldr r5, _080338E4 @ =0x00000385\n\
+	adds r0, r1, r5\n\
+	ldrb r0, [r0]\n\
+	lsls r0, r0, #0x18\n\
+	asrs r0, r0, #0x18\n\
+	cmp r0, #0x12\n\
+	ble _080337D0\n\
+	b _08033910\n\
+_080337D0:\n\
+	ldr r6, _080338E8 @ =0x00000396\n\
+	adds r1, r1, r6\n\
+	ldrb r2, [r1]\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #1\n\
+	ble _080337E0\n\
+	b _08033910\n\
+_080337E0:\n\
+	adds r0, r2, #1\n\
+	movs r2, #0\n\
+	mov sl, r2\n\
+	strb r0, [r1]\n\
+	ldr r1, [r4]\n\
+	ldr r3, [sp, #4]\n\
+	asrs r6, r3, #0x10\n\
+	movs r4, #0xe8\n\
+	lsls r4, r4, #2\n\
+	adds r1, r1, r4\n\
+	adds r1, r1, r6\n\
+	movs r0, #1\n\
+	strb r0, [r1]\n\
+	ldr r5, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r0, [r5]\n\
+	ldr r1, _080338EC @ =0x000003A3\n\
+	adds r0, r0, r1\n\
+	adds r0, r0, r6\n\
+	mov r2, sl\n\
+	strb r2, [r0]\n\
+	ldr r0, [r5]\n\
+	lsls r3, r6, #1\n\
+	mov r8, r3\n\
+	adds r4, #0x10\n\
+	adds r0, r0, r4\n\
+	add r0, r8\n\
+	movs r7, #0\n\
+	mov r5, sl\n\
+	strh r5, [r0]\n\
+	bl Random\n\
+	ldr r1, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r4, [r1]\n\
+	lsls r5, r6, #2\n\
+	adds r4, r4, r5\n\
+	movs r1, #0xaf\n\
+	lsls r1, r1, #3\n\
+	bl __umodsi3\n\
+	ldr r2, _080338F0 @ =0xFFFFFD44\n\
+	adds r0, r0, r2\n\
+	movs r3, #0xf1\n\
+	lsls r3, r3, #2\n\
+	adds r4, r4, r3\n\
+	strh r0, [r4]\n\
+	bl Random\n\
+	ldr r1, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r4, [r1]\n\
+	adds r4, r4, r5\n\
+	movs r1, #9\n\
+	bl __umodsi3\n\
+	lsls r1, r0, #2\n\
+	adds r1, r1, r0\n\
+	lsls r1, r1, #4\n\
+	ldr r2, _080338F4 @ =0x000003C6\n\
+	mov sb, r2\n\
+	add r4, sb\n\
+	strh r1, [r4]\n\
+	bl Random\n\
+	ldr r3, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r4, [r3]\n\
+	movs r1, #0xef\n\
+	lsls r1, r1, #2\n\
+	adds r5, r4, r1\n\
+	add r5, r8\n\
+	adds r1, #0x2c\n\
+	bl __umodsi3\n\
+	adds r0, #0xc8\n\
+	strh r0, [r5]\n\
+	ldr r2, _080338F8 @ =0x000003A6\n\
+	adds r4, r4, r2\n\
+	adds r4, r4, r6\n\
+	strb r7, [r4]\n\
+	ldr r3, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r0, [r3]\n\
+	ldr r4, _080338FC @ =0x000003A9\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r6\n\
+	strb r7, [r0]\n\
+	movs r5, #4\n\
+	str r5, [sp]\n\
+	movs r7, #4\n\
+	ldr r0, [r3]\n\
+	ldr r6, _08033900 @ =0x000003B6\n\
+	adds r0, r0, r6\n\
+	add r0, r8\n\
+	mov r1, sl\n\
+	strh r1, [r0]\n\
+	ldr r0, _08033904 @ =gMPlayInfo_SE1\n\
+	ldr r1, _08033908 @ =gUnknown_086A1588\n\
+	bl MPlayStart\n\
+	movs r5, #2\n\
+	mov r8, sb\n\
+_080338A4:\n\
+	ldr r0, _080338E0 @ =gCurrentPinballGame\n\
+	ldr r2, [r0]\n\
+	lsls r0, r5, #0x10\n\
+	asrs r4, r0, #0x10\n\
+	lsls r1, r4, #2\n\
+	adds r1, r2, r1\n\
+	add r1, r8\n\
+	subs r3, r4, #1\n\
+	lsls r0, r3, #2\n\
+	adds r2, r2, r0\n\
+	add r2, r8\n\
+	movs r6, #0\n\
+	ldrsh r1, [r1, r6]\n\
+	movs r6, #0\n\
+	ldrsh r0, [r2, r6]\n\
+	cmp r1, r0\n\
+	ble _080338D2\n\
+	lsls r1, r3, #0x10\n\
+	asrs r1, r1, #0x10\n\
+	adds r0, r4, #0\n\
+	bl sub_3342C\n\
+	movs r5, #3\n\
+_080338D2:\n\
+	lsls r0, r5, #0x10\n\
+	ldr r1, _0803390C @ =0xFFFF0000\n\
+	adds r0, r0, r1\n\
+	lsrs r5, r0, #0x10\n\
+	cmp r0, #0\n\
+	bgt _080338A4\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_080338E0: .4byte gCurrentPinballGame\n\
+_080338E4: .4byte 0x00000385\n\
+_080338E8: .4byte 0x00000396\n\
+_080338EC: .4byte 0x000003A3\n\
+_080338F0: .4byte 0xFFFFFD44\n\
+_080338F4: .4byte 0x000003C6\n\
+_080338F8: .4byte 0x000003A6\n\
+_080338FC: .4byte 0x000003A9\n\
+_08033900: .4byte 0x000003B6\n\
+_08033904: .4byte gMPlayInfo_SE1\n\
+_08033908: .4byte gUnknown_086A1588\n\
+_0803390C: .4byte 0xFFFF0000\n\
+_08033910:\n\
+	ldr r0, _08033940 @ =gCurrentPinballGame\n\
+	ldr r2, [r0]\n\
+	ldr r3, [sp, #4]\n\
+	asrs r4, r3, #0x10\n\
+	lsls r1, r4, #2\n\
+	adds r1, r2, r1\n\
+	movs r5, #0xf1\n\
+	lsls r5, r5, #2\n\
+	adds r3, r1, r5\n\
+	movs r5, #0\n\
+	movs r0, #0\n\
+	strh r0, [r3]\n\
+	ldr r6, _08033944 @ =0x000003C6\n\
+	adds r1, r1, r6\n\
+	movs r0, #0x78\n\
+	strh r0, [r1]\n\
+	ldr r0, _08033948 @ =0x000003A6\n\
+	adds r2, r2, r0\n\
+	adds r2, r2, r4\n\
+	strb r5, [r2]\n\
+	bl Random\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_08033940: .4byte gCurrentPinballGame\n\
+_08033944: .4byte 0x000003C6\n\
+_08033948: .4byte 0x000003A6\n\
+_0803394C:\n\
+	ldr r1, _08033980 @ =gCurrentPinballGame\n\
+	ldr r2, [r1]\n\
+	ldr r3, [sp, #4]\n\
+	asrs r4, r3, #0x10\n\
+	lsls r1, r4, #1\n\
+	movs r5, #0xec\n\
+	lsls r5, r5, #2\n\
+	adds r0, r2, r5\n\
+	adds r1, r0, r1\n\
+	ldrh r0, [r1]\n\
+	cmp r0, #0x13\n\
+	bhi _08033988\n\
+	adds r0, #1\n\
+	strh r0, [r1]\n\
+	ldr r6, _08033984 @ =0x000003A6\n\
+	adds r2, r2, r6\n\
+	adds r2, r2, r4\n\
+	ldrh r0, [r1]\n\
+	movs r1, #3\n\
+	ands r0, r1\n\
+	lsrs r0, r0, #1\n\
+	strb r0, [r2]\n\
+	movs r0, #4\n\
+	str r0, [sp]\n\
+	movs r7, #4\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_08033980: .4byte gCurrentPinballGame\n\
+_08033984: .4byte 0x000003A6\n\
+_08033988:\n\
+	ldr r0, _080339B0 @ =gMain\n\
+	ldr r0, [r0, #0x4c]\n\
+	movs r1, #1\n\
+	ands r0, r1\n\
+	cmp r0, #0\n\
+	beq _080339BC\n\
+	movs r3, #0xe8\n\
+	lsls r3, r3, #2\n\
+	adds r1, r2, r3\n\
+	adds r1, r1, r4\n\
+	movs r2, #0\n\
+	movs r0, #2\n\
+	strb r0, [r1]\n\
+	ldr r5, _080339B4 @ =gCurrentPinballGame\n\
+	ldr r0, [r5]\n\
+	ldr r6, _080339B8 @ =0x000003A3\n\
+	adds r0, r0, r6\n\
+	adds r0, r0, r4\n\
+	strb r2, [r0]\n\
+	b _080339D6\n\
+	.align 2, 0\n\
+_080339B0: .4byte gMain\n\
+_080339B4: .4byte gCurrentPinballGame\n\
+_080339B8: .4byte 0x000003A3\n\
+_080339BC:\n\
+	movs r1, #0xe8\n\
+	lsls r1, r1, #2\n\
+	adds r0, r2, r1\n\
+	adds r0, r0, r4\n\
+	movs r1, #3\n\
+	strb r1, [r0]\n\
+	ldr r2, _08033A0C @ =gCurrentPinballGame\n\
+	ldr r0, [r2]\n\
+	ldr r3, _08033A10 @ =0x000003A3\n\
+	adds r0, r0, r3\n\
+	adds r0, r0, r4\n\
+	movs r1, #7\n\
+	strb r1, [r0]\n\
+_080339D6:\n\
+	ldr r4, _08033A0C @ =gCurrentPinballGame\n\
+	ldr r2, [r4]\n\
+	ldr r5, [sp, #4]\n\
+	asrs r3, r5, #0x10\n\
+	lsls r1, r3, #1\n\
+	movs r6, #0xec\n\
+	lsls r6, r6, #2\n\
+	adds r0, r2, r6\n\
+	adds r0, r0, r1\n\
+	movs r1, #0\n\
+	strh r1, [r0]\n\
+	ldr r0, _08033A14 @ =0x000003A6\n\
+	adds r2, r2, r0\n\
+	adds r2, r2, r3\n\
+	movs r1, #1\n\
+	strb r1, [r2]\n\
+	ldr r0, [r4]\n\
+	ldr r2, _08033A18 @ =0x000003A9\n\
+	adds r0, r0, r2\n\
+	adds r0, r0, r3\n\
+	strb r1, [r0]\n\
+	ldr r2, _08033A1C @ =gUnknown_086AE5EC\n\
+	ldr r0, [r4]\n\
+	ldr r4, _08033A10 @ =0x000003A3\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r3\n\
+	b _08033FC2\n\
+	.align 2, 0\n\
+_08033A0C: .4byte gCurrentPinballGame\n\
+_08033A10: .4byte 0x000003A3\n\
+_08033A14: .4byte 0x000003A6\n\
+_08033A18: .4byte 0x000003A9\n\
+_08033A1C: .4byte gUnknown_086AE5EC\n\
+_08033A20:\n\
+	ldr r6, _08033AA4 @ =gCurrentPinballGame\n\
+	ldr r5, [r6]\n\
+	ldr r0, [sp, #4]\n\
+	asrs r4, r0, #0x10\n\
+	lsls r7, r4, #1\n\
+	ldr r2, _08033AA8 @ =0x000003B6\n\
+	adds r1, r5, r2\n\
+	adds r1, r1, r7\n\
+	ldrh r0, [r1]\n\
+	adds r0, #1\n\
+	movs r3, #0\n\
+	mov sb, r3\n\
+	movs r6, #0\n\
+	mov r8, r6\n\
+	strh r0, [r1]\n\
+	lsls r0, r4, #2\n\
+	adds r0, r5, r0\n\
+	movs r1, #0xf1\n\
+	lsls r1, r1, #2\n\
+	adds r2, r0, r1\n\
+	ldrh r3, [r2]\n\
+	movs r6, #0\n\
+	ldrsh r1, [r2, r6]\n\
+	ldr r0, _08033AAC @ =0xFFFFFCE0\n\
+	cmp r1, r0\n\
+	ble _08033AB8\n\
+	subs r0, r3, #3\n\
+	strh r0, [r2]\n\
+	ldr r2, _08033AB0 @ =gUnknown_086AE5EC\n\
+	ldr r1, _08033AB4 @ =0x000003A3\n\
+	adds r0, r5, r1\n\
+	adds r6, r0, r4\n\
+	movs r1, #0\n\
+	ldrsb r1, [r6, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r2, #2\n\
+	adds r0, r0, r1\n\
+	movs r3, #0\n\
+	ldrsh r1, [r0, r3]\n\
+	movs r3, #0xec\n\
+	lsls r3, r3, #2\n\
+	adds r0, r5, r3\n\
+	adds r5, r0, r7\n\
+	ldrh r0, [r5]\n\
+	adds r3, r2, #0\n\
+	cmp r1, r0\n\
+	bgt _08033AE2\n\
+	mov r0, r8\n\
+	strh r0, [r5]\n\
+	ldrb r0, [r6]\n\
+	adds r0, #1\n\
+	strb r0, [r6]\n\
+	ldr r1, _08033AA4 @ =gCurrentPinballGame\n\
+	ldr r0, [r1]\n\
+	ldr r2, _08033AB4 @ =0x000003A3\n\
+	adds r0, r0, r2\n\
+	adds r1, r0, r4\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #3\n\
+	ble _08033B20\n\
+	mov r4, sb\n\
+	strb r4, [r1]\n\
+	b _08033B20\n\
+	.align 2, 0\n\
+_08033AA4: .4byte gCurrentPinballGame\n\
+_08033AA8: .4byte 0x000003B6\n\
+_08033AAC: .4byte 0xFFFFFCE0\n\
+_08033AB0: .4byte gUnknown_086AE5EC\n\
+_08033AB4: .4byte 0x000003A3\n\
+_08033AB8:\n\
+	ldr r2, _08033AE8 @ =gUnknown_086AE5EC\n\
+	ldr r6, _08033AEC @ =0x000003A3\n\
+	adds r0, r5, r6\n\
+	adds r6, r0, r4\n\
+	movs r1, #0\n\
+	ldrsb r1, [r6, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r2, #2\n\
+	adds r0, r0, r1\n\
+	movs r3, #0\n\
+	ldrsh r1, [r0, r3]\n\
+	movs r3, #0xec\n\
+	lsls r3, r3, #2\n\
+	adds r0, r5, r3\n\
+	adds r5, r0, r7\n\
+	ldrh r0, [r5]\n\
+	adds r3, r2, #0\n\
+	cmp r1, r0\n\
+	ble _08033AF0\n\
+_08033AE2:\n\
+	adds r0, #1\n\
+	strh r0, [r5]\n\
+	b _08033B20\n\
+	.align 2, 0\n\
+_08033AE8: .4byte gUnknown_086AE5EC\n\
+_08033AEC: .4byte 0x000003A3\n\
+_08033AF0:\n\
+	mov r0, r8\n\
+	strh r0, [r5]\n\
+	ldrb r0, [r6]\n\
+	adds r0, #1\n\
+	strb r0, [r6]\n\
+	ldr r1, _08033B44 @ =gCurrentPinballGame\n\
+	ldr r0, [r1]\n\
+	ldr r2, _08033B48 @ =0x000003A3\n\
+	adds r0, r0, r2\n\
+	adds r1, r0, r4\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #6\n\
+	ble _08033B20\n\
+	movs r0, #7\n\
+	strb r0, [r1]\n\
+	ldr r5, _08033B44 @ =gCurrentPinballGame\n\
+	ldr r0, [r5]\n\
+	movs r6, #0xe8\n\
+	lsls r6, r6, #2\n\
+	adds r0, r0, r6\n\
+	adds r0, r0, r4\n\
+	movs r1, #3\n\
+	strb r1, [r0]\n\
+_08033B20:\n\
+	ldr r0, _08033B44 @ =gCurrentPinballGame\n\
+	ldr r0, [r0]\n\
+	ldr r2, [sp, #4]\n\
+	asrs r1, r2, #0x10\n\
+	ldr r4, _08033B48 @ =0x000003A3\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r1\n\
+	movs r1, #0\n\
+	ldrsb r1, [r0, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r0, r3\n\
+	ldrh r1, [r1]\n\
+	str r1, [sp]\n\
+	adds r1, r3, #4\n\
+	adds r0, r0, r1\n\
+	b _08033FD6\n\
+	.align 2, 0\n\
+_08033B44: .4byte gCurrentPinballGame\n\
+_08033B48: .4byte 0x000003A3\n\
+_08033B4C:\n\
+	ldr r5, _08033BD4 @ =gCurrentPinballGame\n\
+	ldr r4, [r5]\n\
+	ldr r6, [sp, #4]\n\
+	asrs r7, r6, #0x10\n\
+	lsls r0, r7, #1\n\
+	mov r8, r0\n\
+	ldr r2, _08033BD8 @ =0x000003B6\n\
+	adds r1, r4, r2\n\
+	add r1, r8\n\
+	ldrh r0, [r1]\n\
+	adds r0, #1\n\
+	movs r3, #0\n\
+	mov sl, r3\n\
+	movs r5, #0\n\
+	mov sb, r5\n\
+	strh r0, [r1]\n\
+	lsls r0, r7, #2\n\
+	adds r5, r4, r0\n\
+	movs r6, #0xf1\n\
+	lsls r6, r6, #2\n\
+	adds r2, r5, r6\n\
+	ldrh r3, [r2]\n\
+	movs r0, #0\n\
+	ldrsh r1, [r2, r0]\n\
+	ldr r0, _08033BDC @ =0x0000031F\n\
+	cmp r1, r0\n\
+	bgt _08033BE8\n\
+	adds r0, r3, #3\n\
+	strh r0, [r2]\n\
+	ldr r2, _08033BE0 @ =gUnknown_086AE5EC\n\
+	ldr r3, _08033BE4 @ =0x000003A3\n\
+	adds r0, r4, r3\n\
+	adds r6, r0, r7\n\
+	movs r1, #0\n\
+	ldrsb r1, [r6, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r2, #2\n\
+	adds r0, r0, r1\n\
+	movs r5, #0\n\
+	ldrsh r1, [r0, r5]\n\
+	adds r3, #0xd\n\
+	adds r0, r4, r3\n\
+	mov r4, r8\n\
+	adds r5, r0, r4\n\
+	ldrh r0, [r5]\n\
+	adds r3, r2, #0\n\
+	cmp r1, r0\n\
+	bgt _08033C12\n\
+	mov r0, sb\n\
+	strh r0, [r5]\n\
+	ldrb r0, [r6]\n\
+	adds r0, #1\n\
+	strb r0, [r6]\n\
+	ldr r1, _08033BD4 @ =gCurrentPinballGame\n\
+	ldr r0, [r1]\n\
+	ldr r2, _08033BE4 @ =0x000003A3\n\
+	adds r0, r0, r2\n\
+	adds r1, r0, r7\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0xa\n\
+	ble _08033C50\n\
+	movs r0, #7\n\
+	strb r0, [r1]\n\
+	b _08033C50\n\
+	.align 2, 0\n\
+_08033BD4: .4byte gCurrentPinballGame\n\
+_08033BD8: .4byte 0x000003B6\n\
+_08033BDC: .4byte 0x0000031F\n\
+_08033BE0: .4byte gUnknown_086AE5EC\n\
+_08033BE4: .4byte 0x000003A3\n\
+_08033BE8:\n\
+	ldr r2, _08033C18 @ =gUnknown_086AE5EC\n\
+	ldr r3, _08033C1C @ =0x000003A3\n\
+	adds r0, r4, r3\n\
+	adds r6, r0, r7\n\
+	movs r1, #0\n\
+	ldrsb r1, [r6, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r2, #2\n\
+	adds r0, r0, r1\n\
+	movs r5, #0\n\
+	ldrsh r1, [r0, r5]\n\
+	adds r3, #0xd\n\
+	adds r0, r4, r3\n\
+	mov r4, r8\n\
+	adds r5, r0, r4\n\
+	ldrh r0, [r5]\n\
+	adds r3, r2, #0\n\
+	cmp r1, r0\n\
+	ble _08033C20\n\
+_08033C12:\n\
+	adds r0, #1\n\
+	strh r0, [r5]\n\
+	b _08033C50\n\
+	.align 2, 0\n\
+_08033C18: .4byte gUnknown_086AE5EC\n\
+_08033C1C: .4byte 0x000003A3\n\
+_08033C20:\n\
+	mov r0, sb\n\
+	strh r0, [r5]\n\
+	ldrb r0, [r6]\n\
+	adds r0, #1\n\
+	strb r0, [r6]\n\
+	ldr r1, _08033C74 @ =gCurrentPinballGame\n\
+	ldr r0, [r1]\n\
+	ldr r2, _08033C78 @ =0x000003A3\n\
+	adds r0, r0, r2\n\
+	adds r1, r0, r7\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0xd\n\
+	ble _08033C50\n\
+	mov r4, sl\n\
+	strb r4, [r1]\n\
+	ldr r5, _08033C74 @ =gCurrentPinballGame\n\
+	ldr r0, [r5]\n\
+	movs r6, #0xe8\n\
+	lsls r6, r6, #2\n\
+	adds r0, r0, r6\n\
+	adds r0, r0, r7\n\
+	movs r1, #2\n\
+	strb r1, [r0]\n\
+_08033C50:\n\
+	ldr r0, _08033C74 @ =gCurrentPinballGame\n\
+	ldr r0, [r0]\n\
+	ldr r2, [sp, #4]\n\
+	asrs r1, r2, #0x10\n\
+	ldr r4, _08033C78 @ =0x000003A3\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r1\n\
+	movs r1, #0\n\
+	ldrsb r1, [r0, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r0, r3\n\
+	ldrh r1, [r1]\n\
+	str r1, [sp]\n\
+	adds r1, r3, #4\n\
+	adds r0, r0, r1\n\
+	b _08033FD6\n\
+	.align 2, 0\n\
+_08033C74: .4byte gCurrentPinballGame\n\
+_08033C78: .4byte 0x000003A3\n\
+_08033C7C:\n\
+	ldr r3, _08033D0C @ =gUnknown_086AE5EC\n\
+	ldr r6, _08033D10 @ =gCurrentPinballGame\n\
+	ldr r2, [r6]\n\
+	ldr r5, [sp, #4]\n\
+	asrs r4, r5, #0x10\n\
+	ldr r0, _08033D14 @ =0x000003A3\n\
+	adds r2, r2, r0\n\
+	adds r2, r2, r4\n\
+	movs r1, #0\n\
+	ldrsb r1, [r2, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r0, r3\n\
+	ldrh r1, [r1]\n\
+	str r1, [sp]\n\
+	adds r3, #4\n\
+	adds r0, r0, r3\n\
+	ldrh r7, [r0]\n\
+	movs r3, #0\n\
+	movs r0, #0xe\n\
+	strb r0, [r2]\n\
+	ldr r5, [r6]\n\
+	lsls r1, r4, #1\n\
+	movs r2, #0xec\n\
+	lsls r2, r2, #2\n\
+	adds r0, r5, r2\n\
+	adds r0, r0, r1\n\
+	movs r2, #0\n\
+	strh r3, [r0]\n\
+	movs r3, #0xe8\n\
+	lsls r3, r3, #2\n\
+	adds r0, r5, r3\n\
+	adds r0, r0, r4\n\
+	movs r1, #5\n\
+	strb r1, [r0]\n\
+	ldr r0, [r6]\n\
+	movs r5, #0xeb\n\
+	lsls r5, r5, #2\n\
+	adds r0, r0, r5\n\
+	adds r0, r0, r4\n\
+	strb r2, [r0]\n\
+	ldr r0, [r6]\n\
+	ldr r1, _08033D18 @ =0x000003A9\n\
+	adds r0, r0, r1\n\
+	adds r0, r0, r4\n\
+	strb r2, [r0]\n\
+	ldr r0, [r6]\n\
+	ldr r2, _08033D1C @ =0x00000396\n\
+	adds r1, r0, r2\n\
+	ldrb r2, [r1]\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0\n\
+	ble _08033CEE\n\
+	subs r0, r2, #1\n\
+	strb r0, [r1]\n\
+_08033CEE:\n\
+	ldr r1, [r6]\n\
+	ldr r0, _08033D20 @ =0x000186A0\n\
+	str r0, [r1, #0x3c]\n\
+	ldr r3, _08033D24 @ =0x00000385\n\
+	adds r1, r1, r3\n\
+	ldrb r0, [r1]\n\
+	adds r0, #1\n\
+	strb r0, [r1]\n\
+	movs r0, 0xF2\n\
+	bl m4aSongNumStart\n\
+	movs r0, #7\n\
+	bl sub_11B0\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_08033D0C: .4byte gUnknown_086AE5EC\n\
+_08033D10: .4byte gCurrentPinballGame\n\
+_08033D14: .4byte 0x000003A3\n\
+_08033D18: .4byte 0x000003A9\n\
+_08033D1C: .4byte 0x00000396\n\
+_08033D20: .4byte 0x000186A0\n\
+_08033D24: .4byte 0x00000385\n\
+_08033D28:\n\
+	ldr r3, _08033D60 @ =gUnknown_086AE5EC\n\
+	ldr r4, _08033D64 @ =gCurrentPinballGame\n\
+	ldr r2, [r4]\n\
+	ldr r5, [sp, #4]\n\
+	asrs r4, r5, #0x10\n\
+	ldr r6, _08033D68 @ =0x000003A3\n\
+	adds r0, r2, r6\n\
+	adds r5, r0, r4\n\
+	movs r1, #0\n\
+	ldrsb r1, [r5, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r3, #2\n\
+	adds r0, r0, r1\n\
+	movs r6, #0\n\
+	ldrsh r1, [r0, r6]\n\
+	lsls r0, r4, #1\n\
+	movs r6, #0xec\n\
+	lsls r6, r6, #2\n\
+	adds r2, r2, r6\n\
+	adds r2, r2, r0\n\
+	ldrh r0, [r2]\n\
+	cmp r1, r0\n\
+	ble _08033D6C\n\
+	adds r0, #1\n\
+	strh r0, [r2]\n\
+	b _08033DA8\n\
+	.align 2, 0\n\
+_08033D60: .4byte gUnknown_086AE5EC\n\
+_08033D64: .4byte gCurrentPinballGame\n\
+_08033D68: .4byte 0x000003A3\n\
+_08033D6C:\n\
+	movs r6, #0\n\
+	movs r0, #0\n\
+	strh r0, [r2]\n\
+	ldrb r0, [r5]\n\
+	adds r0, #1\n\
+	strb r0, [r5]\n\
+	ldr r1, _08033DEC @ =gCurrentPinballGame\n\
+	ldr r0, [r1]\n\
+	ldr r2, _08033DF0 @ =0x000003A3\n\
+	adds r0, r0, r2\n\
+	adds r1, r0, r4\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0xf\n\
+	ble _08033DA8\n\
+	movs r0, #0xf\n\
+	strb r0, [r1]\n\
+	ldr r5, _08033DEC @ =gCurrentPinballGame\n\
+	ldr r0, [r5]\n\
+	movs r1, #0xe8\n\
+	lsls r1, r1, #2\n\
+	adds r0, r0, r1\n\
+	adds r0, r0, r4\n\
+	movs r1, #9\n\
+	strb r1, [r0]\n\
+	ldr r0, [r5]\n\
+	adds r2, #3\n\
+	adds r0, r0, r2\n\
+	adds r0, r0, r4\n\
+	strb r6, [r0]\n\
+_08033DA8:\n\
+	ldr r6, _08033DEC @ =gCurrentPinballGame\n\
+	ldr r1, [r6]\n\
+	ldr r5, [sp, #4]\n\
+	asrs r4, r5, #0x10\n\
+	ldr r5, _08033DF0 @ =0x000003A3\n\
+	adds r0, r1, r5\n\
+	adds r0, r0, r4\n\
+	ldrb r0, [r0]\n\
+	lsls r0, r0, #0x18\n\
+	asrs r0, r0, #0x18\n\
+	cmp r0, #0xf\n\
+	bne _08033DCE\n\
+	movs r0, #0xeb\n\
+	lsls r0, r0, #2\n\
+	adds r1, r1, r0\n\
+	adds r1, r1, r4\n\
+	ldrb r0, [r1]\n\
+	adds r0, #1\n\
+	strb r0, [r1]\n\
+_08033DCE:\n\
+	ldr r0, [r6]\n\
+	adds r0, r0, r5\n\
+	adds r0, r0, r4\n\
+	movs r1, #0\n\
+	ldrsb r1, [r0, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r0, r3\n\
+	ldrh r1, [r1]\n\
+	str r1, [sp]\n\
+	adds r1, r3, #4\n\
+	adds r0, r0, r1\n\
+	b _08033FD6\n\
+	.align 2, 0\n\
+_08033DEC: .4byte gCurrentPinballGame\n\
+_08033DF0: .4byte 0x000003A3\n\
+_08033DF4:\n\
+	ldr r5, _08033E14 @ =gCurrentPinballGame\n\
+	ldr r4, [r5]\n\
+	ldr r1, [sp, #4]\n\
+	asrs r3, r1, #0x10\n\
+	lsls r1, r3, #1\n\
+	movs r2, #0xec\n\
+	lsls r2, r2, #2\n\
+	adds r0, r4, r2\n\
+	adds r1, r0, r1\n\
+	ldrh r0, [r1]\n\
+	cmp r0, #5\n\
+	bhi _08033E18\n\
+	adds r0, #1\n\
+	strh r0, [r1]\n\
+	movs r3, #3\n\
+	b _08033E8E\n\
+	.align 2, 0\n\
+_08033E14: .4byte gCurrentPinballGame\n\
+_08033E18:\n\
+	movs r2, #0\n\
+	movs r0, #0\n\
+	strh r0, [r1]\n\
+	ldr r6, _08033E64 @ =0x000003A3\n\
+	adds r0, r4, r6\n\
+	adds r0, r0, r3\n\
+	movs r1, #0x12\n\
+	strb r1, [r0]\n\
+	ldr r0, [r5]\n\
+	movs r1, #0xe8\n\
+	lsls r1, r1, #2\n\
+	adds r0, r0, r1\n\
+	adds r0, r0, r3\n\
+	movs r1, #8\n\
+	strb r1, [r0]\n\
+	ldr r0, [r5]\n\
+	ldr r4, _08033E68 @ =0x000003A9\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r3\n\
+	strb r2, [r0]\n\
+	ldr r0, [r5]\n\
+	ldr r5, _08033E6C @ =0x00000396\n\
+	adds r1, r0, r5\n\
+	ldrb r2, [r1]\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0\n\
+	ble _08033E54\n\
+	subs r0, r2, #1\n\
+	strb r0, [r1]\n\
+_08033E54:\n\
+	movs r6, #3\n\
+	str r6, [sp]\n\
+	movs r7, #3\n\
+	movs r0, 0xF3\n\
+	bl m4aSongNumStart\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_08033E64: .4byte 0x000003A3\n\
+_08033E68: .4byte 0x000003A9\n\
+_08033E6C: .4byte 0x00000396\n\
+_08033E70:\n\
+	ldr r5, _08033E94 @ =gCurrentPinballGame\n\
+	ldr r4, [r5]\n\
+	ldr r0, [sp, #4]\n\
+	asrs r3, r0, #0x10\n\
+	lsls r1, r3, #1\n\
+	movs r2, #0xec\n\
+	lsls r2, r2, #2\n\
+	adds r0, r4, r2\n\
+	adds r1, r0, r1\n\
+	ldrh r0, [r1]\n\
+	cmp r0, #5\n\
+	bhi _08033E98\n\
+	adds r0, #1\n\
+	strh r0, [r1]\n\
+	movs r3, #9\n\
+_08033E8E:\n\
+	str r3, [sp]\n\
+	movs r7, #3\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_08033E94: .4byte gCurrentPinballGame\n\
+_08033E98:\n\
+	movs r2, #0\n\
+	movs r0, #0\n\
+	strh r0, [r1]\n\
+	ldr r6, _08033EE4 @ =0x000003A3\n\
+	adds r0, r4, r6\n\
+	adds r0, r0, r3\n\
+	movs r1, #0x12\n\
+	strb r1, [r0]\n\
+	ldr r0, [r5]\n\
+	movs r1, #0xe8\n\
+	lsls r1, r1, #2\n\
+	adds r0, r0, r1\n\
+	adds r0, r0, r3\n\
+	movs r1, #8\n\
+	strb r1, [r0]\n\
+	ldr r0, [r5]\n\
+	ldr r4, _08033EE8 @ =0x000003A9\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r3\n\
+	strb r2, [r0]\n\
+	ldr r0, [r5]\n\
+	ldr r5, _08033EEC @ =0x00000396\n\
+	adds r1, r0, r5\n\
+	ldrb r2, [r1]\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0\n\
+	ble _08033ED4\n\
+	subs r0, r2, #1\n\
+	strb r0, [r1]\n\
+_08033ED4:\n\
+	movs r0, 0xF3\n\
+	bl m4aSongNumStart\n\
+	movs r6, #9\n\
+	str r6, [sp]\n\
+	movs r7, #3\n\
+	b _08033FD8\n\
+	.align 2, 0\n\
+_08033EE4: .4byte 0x000003A3\n\
+_08033EE8: .4byte 0x000003A9\n\
+_08033EEC: .4byte 0x00000396\n\
+_08033EF0:\n\
+	ldr r3, _08033F28 @ =gUnknown_086AE5EC\n\
+	ldr r0, _08033F2C @ =gCurrentPinballGame\n\
+	ldr r2, [r0]\n\
+	ldr r1, [sp, #4]\n\
+	asrs r4, r1, #0x10\n\
+	ldr r5, _08033F30 @ =0x000003A3\n\
+	adds r0, r2, r5\n\
+	adds r5, r0, r4\n\
+	movs r1, #0\n\
+	ldrsb r1, [r5, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r3, #2\n\
+	adds r0, r0, r1\n\
+	movs r6, #0\n\
+	ldrsh r1, [r0, r6]\n\
+	lsls r0, r4, #1\n\
+	movs r6, #0xec\n\
+	lsls r6, r6, #2\n\
+	adds r2, r2, r6\n\
+	adds r2, r2, r0\n\
+	ldrh r0, [r2]\n\
+	cmp r1, r0\n\
+	ble _08033F34\n\
+	adds r0, #1\n\
+	strh r0, [r2]\n\
+	b _08033F64\n\
+	.align 2, 0\n\
+_08033F28: .4byte gUnknown_086AE5EC\n\
+_08033F2C: .4byte gCurrentPinballGame\n\
+_08033F30: .4byte 0x000003A3\n\
+_08033F34:\n\
+	movs r0, #0\n\
+	strh r0, [r2]\n\
+	ldrb r0, [r5]\n\
+	adds r0, #1\n\
+	strb r0, [r5]\n\
+	ldr r1, _08033F88 @ =gCurrentPinballGame\n\
+	ldr r0, [r1]\n\
+	ldr r2, _08033F8C @ =0x000003A3\n\
+	adds r0, r0, r2\n\
+	adds r1, r0, r4\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #0x19\n\
+	ble _08033F64\n\
+	movs r0, #0x19\n\
+	strb r0, [r1]\n\
+	ldr r5, _08033F88 @ =gCurrentPinballGame\n\
+	ldr r0, [r5]\n\
+	movs r6, #0xe8\n\
+	lsls r6, r6, #2\n\
+	adds r0, r0, r6\n\
+	adds r0, r0, r4\n\
+	movs r1, #9\n\
+	strb r1, [r0]\n\
+_08033F64:\n\
+	ldr r0, _08033F88 @ =gCurrentPinballGame\n\
+	ldr r0, [r0]\n\
+	ldr r2, [sp, #4]\n\
+	asrs r1, r2, #0x10\n\
+	ldr r4, _08033F8C @ =0x000003A3\n\
+	adds r0, r0, r4\n\
+	adds r0, r0, r1\n\
+	movs r1, #0\n\
+	ldrsb r1, [r0, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r0, r3\n\
+	ldrh r1, [r1]\n\
+	str r1, [sp]\n\
+	adds r1, r3, #4\n\
+	adds r0, r0, r1\n\
+	b _08033FD6\n\
+	.align 2, 0\n\
+_08033F88: .4byte gCurrentPinballGame\n\
+_08033F8C: .4byte 0x000003A3\n\
+_08033F90:\n\
+	ldr r3, _0803401C @ =gCurrentPinballGame\n\
+	ldr r0, [r3]\n\
+	ldr r5, [sp, #4]\n\
+	asrs r4, r5, #0x10\n\
+	ldr r6, _08034020 @ =0x000003A6\n\
+	adds r0, r0, r6\n\
+	adds r0, r0, r4\n\
+	movs r1, #0\n\
+	strb r1, [r0]\n\
+	ldr r0, [r3]\n\
+	ldr r2, _08034024 @ =0x000003A9\n\
+	adds r0, r0, r2\n\
+	adds r0, r0, r4\n\
+	strb r1, [r0]\n\
+	ldr r0, [r3]\n\
+	movs r5, #0xe8\n\
+	lsls r5, r5, #2\n\
+	adds r0, r0, r5\n\
+	adds r0, r0, r4\n\
+	strb r1, [r0]\n\
+	ldr r2, _08034028 @ =gUnknown_086AE5EC\n\
+	ldr r0, [r3]\n\
+	subs r6, #3\n\
+	adds r0, r0, r6\n\
+	adds r0, r0, r4\n\
+_08033FC2:\n\
+	movs r1, #0\n\
+	ldrsb r1, [r0, r1]\n\
+	lsls r0, r1, #1\n\
+	adds r0, r0, r1\n\
+	lsls r0, r0, #1\n\
+	adds r1, r0, r2\n\
+	ldrh r1, [r1]\n\
+	str r1, [sp]\n\
+	adds r2, #4\n\
+	adds r0, r0, r2\n\
+_08033FD6:\n\
+	ldrh r7, [r0]\n\
+_08033FD8:\n\
+	ldr r2, _0803401C @ =gCurrentPinballGame\n\
+	ldr r3, [r2]\n\
+	ldr r0, [sp, #4]\n\
+	asrs r6, r0, #0x10\n\
+	lsls r1, r6, #1\n\
+	ldr r4, _0803402C @ =0x000003B6\n\
+	adds r0, r3, r4\n\
+	adds r5, r0, r1\n\
+	adds r4, #6\n\
+	adds r0, r3, r4\n\
+	adds r0, r0, r1\n\
+	ldrh r1, [r5]\n\
+	ldrh r0, [r0]\n\
+	cmp r1, r0\n\
+	bls _0803404C\n\
+	ldr r1, _08034030 @ =0x00000385\n\
+	adds r0, r3, r1\n\
+	ldrb r0, [r0]\n\
+	lsls r0, r0, #0x18\n\
+	asrs r0, r0, #0x18\n\
+	cmp r0, #0x12\n\
+	bgt _0803404C\n\
+	movs r0, #0\n\
+	strh r0, [r5]\n\
+	movs r2, #0xe8\n\
+	lsls r2, r2, #2\n\
+	adds r0, r3, r2\n\
+	adds r1, r0, r6\n\
+	movs r0, #0\n\
+	ldrsb r0, [r1, r0]\n\
+	cmp r0, #2\n\
+	bne _08034034\n\
+	movs r0, #6\n\
+	b _08034036\n\
+	.align 2, 0\n\
+_0803401C: .4byte gCurrentPinballGame\n\
+_08034020: .4byte 0x000003A6\n\
+_08034024: .4byte 0x000003A9\n\
+_08034028: .4byte gUnknown_086AE5EC\n\
+_0803402C: .4byte 0x000003B6\n\
+_08034030: .4byte 0x00000385\n\
+_08034034:\n\
+	movs r0, #7\n\
+_08034036:\n\
+	strb r0, [r1]\n\
+	ldr r3, _080340D8 @ =gCurrentPinballGame\n\
+	ldr r0, [r3]\n\
+	ldr r4, [sp, #4]\n\
+	asrs r1, r4, #0xf\n\
+	movs r5, #0xec\n\
+	lsls r5, r5, #2\n\
+	adds r0, r0, r5\n\
+	adds r0, r0, r1\n\
+	movs r1, #0\n\
+	strh r1, [r0]\n\
+_0803404C:\n\
+	ldr r6, _080340D8 @ =gCurrentPinballGame\n\
+	ldr r0, [r6]\n\
+	ldr r1, [sp, #4]\n\
+	asrs r5, r1, #0x10\n\
+	ldr r2, _080340DC @ =0x00000397\n\
+	adds r1, r0, r2\n\
+	adds r1, r1, r5\n\
+	adds r2, #3\n\
+	adds r0, r0, r2\n\
+	adds r0, r0, r5\n\
+	ldrb r0, [r0]\n\
+	strb r0, [r1]\n\
+	ldr r0, [r6]\n\
+	adds r0, r0, r2\n\
+	adds r0, r0, r5\n\
+	strb r7, [r0]\n\
+	ldr r0, [r6]\n\
+	ldr r3, _080340E0 @ =0x0000039D\n\
+	adds r0, r0, r3\n\
+	adds r0, r0, r5\n\
+	mov r4, sp\n\
+	ldrb r4, [r4]\n\
+	strb r4, [r0]\n\
+	ldr r4, [r6]\n\
+	lsls r0, r5, #2\n\
+	adds r4, r4, r0\n\
+	movs r6, #0xf1\n\
+	lsls r6, r6, #2\n\
+	adds r0, r4, r6\n\
+	movs r1, #0\n\
+	ldrsh r0, [r0, r1]\n\
+	movs r1, #0xa\n\
+	bl __divsi3\n\
+	lsls r0, r0, #0x10\n\
+	asrs r0, r0, #0xf\n\
+	adds r0, #0xd0\n\
+	movs r2, #0xf4\n\
+	lsls r2, r2, #2\n\
+	adds r1, r4, r2\n\
+	strh r0, [r1]\n\
+	ldr r3, _080340E4 @ =0x000003C6\n\
+	adds r0, r4, r3\n\
+	movs r6, #0\n\
+	ldrsh r0, [r0, r6]\n\
+	movs r1, #0xa\n\
+	bl __divsi3\n\
+	lsls r0, r0, #0x10\n\
+	asrs r0, r0, #0xf\n\
+	adds r0, #0x42\n\
+	ldr r1, _080340E8 @ =0x000003D2\n\
+	adds r4, r4, r1\n\
+	strh r0, [r4]\n\
+	adds r5, #1\n\
+	lsls r5, r5, #0x10\n\
+	lsrs r2, r5, #0x10\n\
+	asrs r5, r5, #0x10\n\
+	cmp r5, #2\n\
+	bgt _080340C8\n\
+	bl _08033752\n\
+_080340C8:\n\
+	add sp, #8\n\
+	pop {r3, r4, r5}\n\
+	mov r8, r3\n\
+	mov sb, r4\n\
+	mov sl, r5\n\
+	pop {r4, r5, r6, r7}\n\
+	pop {r0}\n\
+	bx r0\n\
+	.align 2, 0\n\
+_080340D8: .4byte gCurrentPinballGame\n\
+_080340DC: .4byte 0x00000397\n\
+_080340E0: .4byte 0x0000039D\n\
+_080340E4: .4byte 0x000003C6\n\
+_080340E8: .4byte 0x000003D2\n\
+    ");
+}
+#endif
