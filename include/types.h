@@ -18,17 +18,18 @@ struct SpriteSet
 
 struct OamDataSimple
 {
-    u16 oamId;
-    s16 xOffset;
-    s16 yOffset;
+    /*0x00*/ u16 oamId;
+    /*0x02*/ s16 xOffset;
+    /*0x04*/ s16 yOffset;
 };
+// size: 0x8
 
 struct SpriteGroup
 {
-    u16 available;
-    s16 baseX;
-    s16 baseY;
-    struct OamDataSimple oam[MAX_SPRITES_IN_GROUP];
+    /*0x00*/ u16 available;
+    /*0x02*/ s16 baseX;
+    /*0x04*/ s16 baseY;
+    /*0x08*/ struct OamDataSimple oam[MAX_SPRITES_IN_GROUP];
 };
 // size: 0xB8
 
@@ -64,7 +65,7 @@ struct PokemonSpecies {
     u8 eggIndex; // Non-zero for all hatch pokemon other than Wurmple, zero for Wurmple and all non-hatch pokemon
     u8 unk13; // Something egg related; only hatch pokemon have this set to 1, but not all do, and there is no other pattern
     // unk13 list: Azurill, Skitty, Zubat, Plusle, Minun, Igglybuff, Shuppet, Chimecho, Pichu, Natu
-    u8 evolutionMethod; // Exp, Stone, etc.
+    s8 evolutionMethod; // Exp, Stone, etc.
     u8 evolutionTarget; // Uses the standard index numbers; e.g. Treecko is 0x00 (SPECIES_TREECKO)
 };
 

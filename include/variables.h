@@ -9,6 +9,12 @@
 #include "constants/high_scores.h"
 #include "constants/pinball_game.h"
 
+#define SPECIES_UNSEEN 0
+#define SPECIES_SEEN 1
+#define SPECIES_SHARED 2
+#define SPECIES_SHARED_AND_SEEN 3
+#define SPECIES_CAUGHT 4
+
 // Place all external variable declarations in this file
 
 extern struct {u16 unk0[5]; u16 unkA[5];} gUnknown_086A6B14;
@@ -129,9 +135,7 @@ extern const s8 gUnknown_086A9748[];
 extern const u8 *const gUnknown_086A975C[7];
 extern const u8 *const gUnknown_086A9778[];
 extern const s16 gEReaderAccessButtonSequence[];
-//extern ? gMonHatchSpriteGroupPals;
 //extern ? gMonPortraitGroupPals;
-//extern ? gMonHatchSpriteGroupGfx;
 //extern ? gMonPortraitGroupGfx;
 //extern ? gMonHatchSpriteGroup0_Gfx;
 //extern ? gMonHatchSpriteGroup1_Gfx;
@@ -204,11 +208,20 @@ extern struct VectorU16 gUnknown_086A96AC[];
 extern struct VectorU16 gUnknown_086A96C0[];
 extern const struct VectorU32 gUnknown_080797F0[2][8];
 
+struct Unk086ACD50
+{
+    s8 unk0;
+    s8 unk1;
+    u16 unk2;
+};
+extern struct Unk086ACD50 gUnknown_086ACD50[8];
+extern struct Unk086ACD50 gUnknown_086ACD74[3];
+
 extern u16 gUnknown_02019C40[];
-extern s16 gUnknown_0201A514;
+extern s16 gPokedexNumOwned;
 extern s16 gPokedexSelectedMon;
 extern s8 gUnknown_0202ADE4;
-extern s16 gUnknown_0202BEB8;
+extern s16 gPokedexNumSeen;
 extern s16 gPokedexListPosition;
 
 extern StateFunc gPokedexStateFuncs[];
@@ -249,8 +262,8 @@ extern s8 gUnknown_0202C794;
 extern s8 gUnknown_0201C1B4;
 extern s8 gUnknown_0202C5AC;
 extern s8 gUnknown_02019C28;
-extern s16 gUnknown_0202A1C0[];
-extern s16 gUnknown_0202A390[];
+extern s16 gPokedexFlags[];
+extern s16 gPokedexFlagExchangeBuffer[];
 extern s16 gPokedexListEntryCount;
 
 extern u32 gUnknown_0201B170;

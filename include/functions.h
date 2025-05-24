@@ -33,8 +33,8 @@ void DefaultMainCallback(void);
 
 // src/rom_3219C.c
 
-void sub_3219C(void);
-void sub_3219C(void);
+void PickSpeciesForCatchEmMode(void);
+void PickSpeciesForCatchEmMode(void);
 
 // src/rom_850.c
 
@@ -349,11 +349,9 @@ extern void sub_3FAC(void);
 //extern ? sub_4BB4();
 //extern ? sub_4C80();
 //extern ? Pokedex_ReturnToTitle();
-//extern ? sub_70E0();
 //extern ? sub_71DC();
-//extern ? sub_88E4();
-extern void sub_8974();
-extern s16 sub_8A78(s32 species);
+extern void sub_8974(s16);
+extern s16 sub_8A78(s16);
 extern void ResetPokedex(void);
 
 // asm/rom_1068C.s
@@ -371,18 +369,16 @@ extern void ClearSomeArray(void);
 //extern ? sub_11B9C();
 //extern ? sub_11C14();
 //extern ? sub_11C98();
-//extern ? sub_12BF8();
 extern void sub_1332C();
-//extern ? sub_1333C();
-//extern ? sub_13824();
-//extern ? sub_13934();
-//extern ? sub_13B28();
-//extern ? sub_13D24();
+extern void sub_1333C();
+extern u16 sub_13824(struct Vector16*);
+extern void sub_13B28(struct Vector16*, struct Vector16*, s16);
+extern void sub_13D24(u16, struct Vector16*, struct Vector16*);
 //extern ? sub_14074();
-//extern ? sub_14488();
+extern u16 sub_14488(struct Vector16*, struct Vector16);
 //extern ? sub_1467C();
 //extern ? sub_14740();
-//extern ? sub_1493C();
+extern void sub_1493C(void);
 //extern ? sub_14AF4();
 //extern ? sub_14B84();
 //extern ? sub_14E08();
@@ -555,12 +551,12 @@ extern void sub_31498();
 extern void sub_31B30();
 extern void sub_31BE8(s8);
 //extern ? sub_31CF8();
-//extern ? sub_31F6C();
+//extern ? BuildSpeciesWeightsForCatchEmMode();
 
 // asm/rom_3219C.s
 
-//extern ? sub_32484();
-//extern ? sub_325E0();
+//extern ? BuildSpeciesWeightsForEggMode();
+//extern ? PickSpeciesForEggMode();
 //extern ? sub_326F4();
 //extern ? sub_3276C();
 extern void sub_327C0();
@@ -710,7 +706,7 @@ extern void PlayCry_NormalNoDucking(u16, s8, s8, u8);
 extern void SaveFile_LoadGameData(void);
 //extern ? LoadSaveDataFromSram();
 extern void SaveFile_WriteToSram(void);
-//extern ? SaveFile_SetPokedexFlags();
+extern void SaveFile_SetPokedexFlags(s16, u8);
 extern void SaveFile_ReadSavedGamePresent(void);
 extern void sub_52C64(void);
 
